@@ -68,6 +68,8 @@ function sh_cd_admin_page() {
 
 					if ($action == 'add' || $action == 'edit')
 					{
+					
+
 						$title = 'Add Shortcode';
 						$slug = '';
 						$value = '';
@@ -83,8 +85,11 @@ function sh_cd_admin_page() {
 							// Get Shortcode from DB
 							$shortcode = sh_cd_get_shortcode($existing_id);
 							$slug = $shortcode->slug;
-							$value = $shortcode->data;
+							$value = stripslashes($shortcode->data);
 						}
+
+						$settings = array( 'textarea_name' => 'value' );
+						
 
 						?>
 						<a class="button-secondary" href="<?php echo admin_url('options-general.php?page=sh-cd-admin-page'); ?>"><?php esc_attr_e( 'Cancel' ); ?></a>
@@ -101,7 +106,8 @@ function sh_cd_admin_page() {
 										<p><small><?php echo __('Note: You can not edit a slug name. Editing a slug name may cause issues throughout your site. Please delete this shortcode and create another.'); ?></small></p>
 									<?php endif; ?>
 									<p>Shortcode data / Value:</p>
-									<textarea id="value" name="value" cols="80" rows="10" class="large-text"><?php echo $value; ?></textarea><br>
+									<!--<textarea id="value" name="value" cols="80" rows="10" class="large-text"><?php echo $value; ?></textarea><br>-->
+									<?php wp_editor( $value, 'value', $settings ); ?>
 									
 									<?php echo submit_button( $button_text . __(' Shortcode') ); ?>
 									

@@ -5,7 +5,7 @@ defined('ABSPATH') or die("Jog on!");
 /**
  * Plugin Name: Shortcode Variables
  * Description: Create your own shortcodes and assign text / variables to it. You can then embed these shortcodes throughout your entire site and only have to change the value in one place.
- * Version: 1.0
+ * Version: 1.1
  * Author: YeKen
  * Author URI: http://www.YeKen.uk
  * License: GPL2

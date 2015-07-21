@@ -4,17 +4,17 @@ defined('ABSPATH') or die('Jog on!');
 
 function sh_cd_get_all_shortcodes()
 {
-	global $wpdb;
+    global $wpdb;
 
-	$sql = 'SELECT * FROM ' . $wpdb->prefix . SH_CD_TABLE . ' order by slug asc';
+    $sql = 'SELECT * FROM ' . $wpdb->prefix . SH_CD_TABLE . ' order by slug asc';
 
-	$rows = $wpdb->get_results( $sql );
+    $rows = $wpdb->get_results( $sql );
 
-	if (!is_null($rows))
-		return $rows;
-	
-	return false;
-	
+    if (!is_null($rows))
+        return $rows;
+    
+    return false;
+    
 }
 
 function sh_cd_get_shortcode($id)
@@ -48,6 +48,20 @@ function sh_cd_get_shortcode_by_slug($slug)
     return false;
     
 }
+function sh_cd_get_slug_by_id($id)
+{
+    global $wpdb;
+
+    $sql = $wpdb->prepare('SELECT slug FROM ' . $wpdb->prefix . SH_CD_TABLE . ' where id = %d', $id);
+
+    $row = $wpdb->get_var( $sql );
+
+    if (!is_null($row))
+        return $row;
+    
+    return false;
+    
+}
 
 function sh_cd_save_shortcode($slug, $data, $id = false)
 {
@@ -77,6 +91,8 @@ function sh_cd_save_shortcode($slug, $data, $id = false)
             ), 
             array( '%d' ) 
         );
+
+        sh_cd_delete_cache(sh_cd_get_slug_by_id($id));
     }
     else
     {
@@ -91,8 +107,10 @@ function sh_cd_save_shortcode($slug, $data, $id = false)
                 '%s'   
             )
         );
-    }
-    
+
+        sh_cd_delete_cache($slug);
+    }     
+
     if (false === $result) {
         return false;
     }
@@ -261,4 +279,27 @@ function sh_cd_create_dialog_jquery_code($title, $message, $class_used_to_prompt
       </script>
 
   <?php
+}
+
+function sh_cd_get_cache($key)
+{
+    $key = sh_cd_generate_cache_key($key);
+
+    return get_transient($key);
+}
+function sh_cd_set_cache($key, $data)
+{
+    $key = sh_cd_generate_cache_key($key);
+
+    set_transient($key, $data, SH_CD_CACHING_TIME);
+}
+function sh_cd_delete_cache($key)
+{
+    $key = sh_cd_generate_cache_key($key);
+
+    return delete_transient($key);
+}
+function sh_cd_generate_cache_key($key)
+{
+    return SH_CD_SHORTCODE . $key;  
 }

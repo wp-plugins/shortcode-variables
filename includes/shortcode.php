@@ -16,12 +16,28 @@ add_shortcode( SH_CD_SHORTCODE, 'sh_cd_shortcode' );
 function sh_cd_render_shortcode_from_db($slug)
 {
 	if ($slug != false && !empty($slug))
-	{
-		$shortcode = sh_cd_get_shortcode_by_slug($slug);
+	{ 
+		$cached_shortcode = sh_cd_get_cache($slug);
 
-		if ($shortcode)
+		if ($cached_shortcode != false)
+		{			
+			// Process other shortcodes
+			$cached_shortcode = do_shortcode($cached_shortcode);
+
+			return $cached_shortcode;
+		}
+		else
 		{
-			return $shortcode;
+			$shortcode = sh_cd_get_shortcode_by_slug($slug);
+
+			if ($shortcode)
+			{
+				sh_cd_set_cache($slug, $shortcode);
+
+				$shortcode = do_shortcode($shortcode);
+				
+				return $shortcode;
+			}
 		}
 	}
 }
