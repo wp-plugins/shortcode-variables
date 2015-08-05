@@ -2,12 +2,7 @@
 
 defined('ABSPATH') or die('Jog on!');
 
-
-function sh_cd_admin_menu() {
-	add_options_page( SH_CD_PLUGIN_NAME . ' Options', SH_CD_PLUGIN_NAME, 'manage_options', 'sh-cd-admin-page', 'sh_cd_admin_page' );
-}
-
-function sh_cd_admin_page() {
+function sh_cd_user_defined_page() {
 	
 	wp_enqueue_style('sh-cd-style', plugins_url( 'css/sh-cd.css', __FILE__ ));
 
@@ -92,13 +87,13 @@ function sh_cd_admin_page() {
 						
 
 						?>
-						<a class="button-secondary" href="<?php echo admin_url('options-general.php?page=sh-cd-admin-page'); ?>"><?php esc_attr_e( 'Cancel' ); ?></a>
+						<a class="button-secondary" href="<?php echo admin_url('admin.php?page=sh-cd-shortcode-variables-user-defined'); ?>"><?php esc_attr_e( 'Cancel' ); ?></a>
 						<br /><br />
 						<div class="postbox">
 							<h3 class="hndle"><span><?php echo _e($title); ?> </span></h3>
 							<div style="padding: 0px 15px 0px 15px">
 								
-								<form method="post" action="<?php echo admin_url('options-general.php?page=sh-cd-admin-page&action=save'); ?>">
+								<form method="post" action="<?php echo admin_url('admin.php?page=sh-cd-shortcode-variables-user-defined&action=save'); ?>">
 									<input type="hidden" id="existing-id" name="existing-id" value="<?php echo ((!empty($existing_id)) ? $existing_id : ''); ?>" />
 									<p>Slug:</p>
 									<input type="text" class="regular-text" size="100" id="slug" name="slug" <?php echo (('edit' == $action) ? ' disabled' : ''); ?> placeholder="<?php echo __('Slug'); ?>" <?php echo ((!empty($slug)) ? "value=\"$slug\"" : ""); ?>/>
@@ -119,7 +114,7 @@ function sh_cd_admin_page() {
 					}
 					else
 					{?>
-						<a class="button-primary" href="<?php echo admin_url('options-general.php?page=sh-cd-admin-page&action=add'); ?>"><?php esc_attr_e( 'Add a new Shortcode' ); ?></a>
+						<a class="button-primary" href="<?php echo admin_url('admin.php?page=sh-cd-shortcode-variables-user-defined&action=add'); ?>"><?php esc_attr_e( 'Add a new Shortcode' ); ?></a>
 						<br /><br />
 					
 						
@@ -147,8 +142,8 @@ function sh_cd_admin_page() {
 
 													$class = ($class == 'alternate') ? '' : 'alternate';
 
-													$edit_link = admin_url('options-general.php?page=sh-cd-admin-page&action=edit&id=' . $shortcode->id);
-													$delete_link = admin_url('options-general.php?page=sh-cd-admin-page&action=delete&id=' . $shortcode->id);
+													$edit_link = admin_url('admin.php?page=sh-cd-shortcode-variables-user-defined&action=edit&id=' . $shortcode->id);
+													$delete_link = admin_url('admin.php?page=sh-cd-shortcode-variables-user-defined&action=delete&id=' . $shortcode->id);
 											?>
 												<tr class="<?php echo $class; ?>">
 													<td><a href="<?php echo $edit_link; ?>"><?php echo $shortcode->slug; ?></a></td>
@@ -198,5 +193,74 @@ function sh_cd_admin_page() {
 </div> <?php
 
 	sh_cd_create_dialog_jquery_code(__('Are you sure?'), __('Are you sure you wish to delete this shortcode?'), 'remove-confirm');
+
+}
+
+
+function sh_cd_premade_shortcodes_page() {
+	
+		?>
+
+	<div class="wrap">
+
+	<div id="icon-options-general" class="icon32"></div>
+	
+	<div id="poststuff">
+
+		<div id="post-body" class="metabox-holder columns-3">
+
+			<!-- main content -->
+			<div id="post-body-content">
+
+				<div class="meta-box-sortables ui-sortable">
+							<div class="postbox">
+									<h3 class="hndle"><span><?php _e( 'Pre-made Shortcode Variables' ); ?> </span></h3>
+									<div style="padding: 0px 15px 0px 15px">
+										<p><?php echo __('Below is a list of premade shortcode variables that you can use throughout your website.'); ?></p>
+										<br />
+										<table class="widefat" width="100%">
+											<tr class="row-title">
+												<th class="row-title" width="30%"><?php echo __('Shortcode to embed'); ?></th>
+												<th width="*"><?php echo __('Description'); ?></th>
+												
+											</tr>
+											<?php
+
+											$premade_shortcodes = sh_cd_shortcode_presets();
+
+												$class = '';
+
+												foreach ($premade_shortcodes as $key => $description): 
+
+													$class = ($class == 'alternate') ? '' : 'alternate';
+
+													$shortcode = '[' . SH_CD_SHORTCODE. ' slug="' . $key . '"]';
+
+												?>
+												<tr class="<?php echo $class; ?>">
+													<td><?php echo $shortcode; ?></td>
+													<td><?php echo $description; ?></td>
+												</tr>
+											<?php endforeach; ?>
+										</table>
+										<br />
+									</div>
+								</div>
+					
+
+				</div>
+				<!-- .meta-box-sortables .ui-sortable -->
+
+			</div>
+			<!-- post-body-content -->
+
+		</div>
+		<!-- #post-body .metabox-holder .columns-2 -->
+
+		<br class="clear">
+	</div>
+	<!-- #poststuff -->
+
+</div> <?php
 
 }
