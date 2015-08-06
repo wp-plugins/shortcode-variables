@@ -3,7 +3,11 @@ Contributors: aliakro
 Tags: shortcode, variable, php, text, html, parameter, javascript, embed, reuse
 Requires at least: 4.2.0
 Tested up to: 4.2.2
+<<<<<<< .mine
+Stable tag: 1.3
+=======
 Stable tag: 1.1
+>>>>>>> .r1214331
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -58,6 +62,18 @@ Login into Wordpress Admin Panel and goto Settings > Shortcode Variables
 
 == Changelog ==
 
+<<<<<<< .mine
+= 1.3 =
+
+This was a dummy release to fix an SVN issue with the 1.2 release!
+
+= 1.2 =
+
+* Added Premade shortcodes and framework to add additional ones
+* Added Top Level menu item to support two sub pages. One for user defined shortcodes and another for premade shortcodes.
+
+=======
+>>>>>>> .r1214331
 = 1.1 =
 * Added caching to SQL queries. Therefore making shortcode rendering faster and reduce load on mySQL.
 * TinyMCE editor for editing shortcode content.
