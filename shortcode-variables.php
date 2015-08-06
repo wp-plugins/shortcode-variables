@@ -4,8 +4,8 @@ defined('ABSPATH') or die("Jog on!");
 
 /**
  * Plugin Name: Shortcode Variables
- * Description: Create your own shortcodes and assign text / variables to it or use our premade ones. You can then embed these shortcodes throughout your entire site and only have to change the value in one place.
- * Version: 1.2
+ * Description: Create your own shortcodes and assign text / variables to it. You can then embed these shortcodes throughout your entire site and only have to change the value in one place.
+ * Version: 1.1
  * Author: YeKen
  * Author URI: http://www.YeKen.uk
  * License: GPL2
@@ -44,7 +44,7 @@ include SH_CD_ABSPATH . 'includes/hooks.php';
 include SH_CD_ABSPATH . 'includes/pages.php';
 include SH_CD_ABSPATH . 'includes/functions.php';
 include SH_CD_ABSPATH . 'includes/shortcode.php';
-include SH_CD_ABSPATH . 'includes/shortcode-premade.php';
+
 // -----------------------------------------------------------------------------------------
 // AC: Load relevant language files
 // -----------------------------------------------------------------------------------------

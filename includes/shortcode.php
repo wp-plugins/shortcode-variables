@@ -4,51 +4,40 @@ defined('ABSPATH') or die('Jog on!');
 
 function sh_cd_shortcode( $atts )
 {
-	$shortcode_args = shortcode_atts( array(
-        'slug' => false,
-        'format' => false
+	$a = shortcode_atts( array(
+        'slug' => false
     ), $atts );
 
-	return sh_cd_render_shortcode_from_db($shortcode_args);
+	return sh_cd_render_shortcode_from_db($a['slug']);
 
 }
 add_shortcode( SH_CD_SHORTCODE, 'sh_cd_shortcode' );
 
-function sh_cd_render_shortcode_from_db($shortcode_args)
+function sh_cd_render_shortcode_from_db($slug)
 {
-	$slug = $shortcode_args['slug'];
-
 	if ($slug != false && !empty($slug))
 	{ 
-		// Check if a shortcode preset
-		if (sh_cd_is_shortcode_preset($slug))
-		{
-			return sh_cd_render_shortcode_presets($shortcode_args);
+		$cached_shortcode = sh_cd_get_cache($slug);
+
+		if ($cached_shortcode != false)
+		{			
+			// Process other shortcodes
+			$cached_shortcode = do_shortcode($cached_shortcode);
+
+			return $cached_shortcode;
 		}
 		else
 		{
-			$cached_shortcode = sh_cd_get_cache($slug);
+			$shortcode = sh_cd_get_shortcode_by_slug($slug);
 
-			if ($cached_shortcode != false)
-			{			
-				// Process other shortcodes
-				$cached_shortcode = do_shortcode($cached_shortcode);
-
-				return $cached_shortcode;
-			}
-			else
+			if ($shortcode)
 			{
-				$shortcode = sh_cd_get_shortcode_by_slug($slug);
+				sh_cd_set_cache($slug, $shortcode);
 
-				if ($shortcode)
-				{
-					sh_cd_set_cache($slug, $shortcode);
-
-					$shortcode = do_shortcode($shortcode);
-					
-					return $shortcode;
-				}
+				$shortcode = do_shortcode($shortcode);
+				
+				return $shortcode;
 			}
-		}		
+		}
 	}
 }
