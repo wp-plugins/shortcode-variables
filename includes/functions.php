@@ -145,9 +145,11 @@ function sh_cd_get_slug($text)
 
         $original_slug = $text;
 
-        $try = 1;
+        $try = 1; 
+        var_dump(in_array($text, sh_cd_shortcode_presets()));
 
         // If slug exists, then fetch a unique one!
+        //  v1.1: and ensure slug isn't a preset
         while (!sh_cd_is_slug_unique($text))
         {
             $text = $original_slug . '_' . $try;
@@ -161,7 +163,11 @@ function sh_cd_get_slug($text)
 
 function sh_cd_is_slug_unique($slug)
 {
-     if (!is_admin() || empty($slug))
+    if (!is_admin() || empty($slug))
+        return false;
+
+    // 1.1 Ensure slug is not a prefix
+    if (sh_cd_is_shortcode_preset($slug))
         return false;
 
     global $wpdb;
@@ -198,6 +204,8 @@ function sh_cd_create_database_table()
 	) $charset_collate;";
 
     $wpdb->query($sql);
+
+    update_option('sh-cd-version', SH_CD_PLUGIN_VERSION);
 
 }
 
